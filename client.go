@@ -1276,8 +1276,7 @@ func (c *Client) PerformRequestWithOptions(ctx context.Context, opt PerformReque
 		}
 
 		req, err = NewRequest(opt.Method, conn.URL()+pathWithParams)
-		command, _ := http2curl.GetCurlCommand((*http.Request)(req))
-		log.Printf("req: %+v", command)
+
 		if err != nil {
 			c.errorf("elastic: cannot create request for %s %s: %v", strings.ToUpper(opt.Method), conn.URL()+pathWithParams, err)
 			return nil, err
@@ -1298,6 +1297,9 @@ func (c *Client) PerformRequestWithOptions(ctx context.Context, opt PerformReque
 				return nil, err
 			}
 		}
+		
+		command, _ := http2curl.GetCurlCommand((*http.Request)(req))
+		log.Printf("req: %+v", command)
 
 		// Tracing
 		c.dumpRequest((*http.Request)(req))
